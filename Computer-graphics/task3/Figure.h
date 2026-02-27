@@ -4,9 +4,9 @@
 
 class path {
 public:
-    std::vector<vec2> vertices; // точки ломаной
-    vec3 color;                  // цвет (R,G,B)
-    float thickness;             // толщина
+    std::vector<vec2> vertices; // С‚РѕС‡РєРё Р»РѕРјР°РЅРѕР№
+    vec3 color;                  // С†РІРµС‚ (R,G,B)
+    float thickness;             // С‚РѕР»С‰РёРЅР°
 
     path(std::vector<vec2> verts, vec3 col, float thickn) {
         vertices = verts;

@@ -3,7 +3,7 @@
 class vec2 {
 public:
     float x, y;
-    // конструкторы
+    // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
     vec2() {}
     vec2(float a, float b) : x(a), y(b) {}
 };
@@ -12,12 +12,12 @@ class vec3 {
 public:
     float x, y, z;
 
-    // Конструкторы
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
     vec3() {}
     vec3(float a, float b, float c) : x(a), y(b), z(c) {}
     vec3(vec2 v, float c) : vec3(v.x, v.y, c) {}
 
-    // Умножение векторов (покоординатное)
+    // РЈРјРЅРѕР¶РµРЅРёРµ РІРµРєС‚РѕСЂРѕРІ (РїРѕРєРѕРѕСЂРґРёРЅР°С‚РЅРѕРµ)
     vec3& operator*=(const vec3& v) {
         x *= v.x;
         y *= v.y;
@@ -28,24 +28,24 @@ public:
         return vec3(*this) *= v;
     }
 
-    // Доступ по индексу
+    // Р”РѕСЃС‚СѓРї РїРѕ РёРЅРґРµРєСЃСѓ
     float& operator[](int i) {
         return ((float*)this)[i];
     }
 };
 
-// Скалярное произведение
+// РЎРєР°Р»СЏСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 float dot(vec3 v1, vec3 v2) {
     vec3 tmp = v1 * v2;
     return tmp.x + tmp.y + tmp.z;
 }
 
-// Класс для матриц 3x3
+// РљР»Р°СЃСЃ РґР»СЏ РјР°С‚СЂРёС† 3x3
 class mat3 {
 public:
     vec3 row1, row2, row3;
 
-    // Конструкторы
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
     mat3() {}
     mat3(vec3 r1, vec3 r2, vec3 r3) : row1(r1), row2(r2), row3(r3) {}
     mat3(float a) {
@@ -54,12 +54,12 @@ public:
         row3 = vec3(0.f, 0.f, a);
     }
 
-    // Доступ по индексу (получение строки)
+    // Р”РѕСЃС‚СѓРї РїРѕ РёРЅРґРµРєСЃСѓ (РїРѕР»СѓС‡РµРЅРёРµ СЃС‚СЂРѕРєРё)
     vec3& operator[](int i) {
         return ((vec3*)this)[i];
     }
 
-    // Транспонирование
+    // РўСЂР°РЅСЃРїРѕРЅРёСЂРѕРІР°РЅРёРµ
     mat3 transpose() {
         mat3 tmp(*this);
         for (int i = 0; i < 3; i++)
@@ -68,7 +68,7 @@ public:
         return *this;
     }
 
-    // Умножение матрицы на вектор
+    // РЈРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†С‹ РЅР° РІРµРєС‚РѕСЂ
     const vec3 operator*(const vec3& v) {
         vec3* res = new vec3();
         for (int i = 0; i < 3; i++) {
@@ -77,7 +77,7 @@ public:
         return *res;
     }
 
-    // Умножение матриц
+    // РЈРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†
     mat3& operator*= (const mat3& m) {
         mat3 A(*this), B(m);
         B.transpose();
@@ -90,7 +90,7 @@ public:
     }
 };
 
-// Функция перехода из однородных координат в евклидовы
+// Р¤СѓРЅРєС†РёСЏ РїРµСЂРµС…РѕРґР° РёР· РѕРґРЅРѕСЂРѕРґРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚ РІ РµРІРєР»РёРґРѕРІС‹
 vec2 normalize(vec3 v) {
     return vec2(v.x / v.z, v.y / v.z);
 }
