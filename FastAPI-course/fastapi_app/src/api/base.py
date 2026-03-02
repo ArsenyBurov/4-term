@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, HTTPException
 
-from schemas.posts import PostRequestSchema, PostResponseSchema
+from src.schemas.posts import PostRequestSchema, PostResponseSchema
 
 
 router = APIRouter()
@@ -9,6 +9,11 @@ router = APIRouter()
 @router.get("/hello_world", status_code=status.HTTP_200_OK)
 async def get_hello_world() -> dict:
     response = {"text": "Hello, World!"}
+
+    with database.session
+
+    user_repo=UserRepository()
+
 
     return response
 
