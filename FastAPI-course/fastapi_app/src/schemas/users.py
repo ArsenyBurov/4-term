@@ -1,6 +1,8 @@
-from pydantic import BaseModel, SecretStr, Field
+from pydantic import BaseModel, SecretStr, ConfigDict
 
 
 class User(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     login: str
     password: SecretStr
