@@ -2,7 +2,7 @@ from typing import Type
 
 from sqlalchemy.orm import Session
 
-from infrastructure.sqlite.models.users import User
+from src.infrastructure.sqlite.models.users import User
 
 
 class UserRepository:

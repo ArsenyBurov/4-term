@@ -1,9 +1,9 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 
-from schemas.posts import PostRequestSchema, PostResponseSchema
-from schemas.users import User
-from domain.user.use_cases.get_user_by_login import GetUserByLoginUseCase
-from api.depends import get_get_user_by_login_use_case
+from src.schemas.posts import PostRequestSchema, PostResponseSchema
+from src.schemas.users import User
+from src.domain.user.use_cases.get_user_by_login import GetUserByLoginUseCase
+from src.api.depends import get_get_user_by_login_use_case
 
 router = APIRouter()
 

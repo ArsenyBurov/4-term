@@ -1,6 +1,6 @@
-from infrastructure.sqlite.database import database
-from infrastructure.sqlite.repositories.users import UserRepository
-from schemas.users import User as UserSchema
+from src.infrastructure.sqlite.database import database
+from src.infrastructure.sqlite.repositories.users import UserRepository
+from src.schemas.users import User as UserSchema
 
 
 class GetUserByLoginUseCase:
