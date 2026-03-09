@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <windows.h>
 #include <iomanip>
 using namespace std;
@@ -27,19 +27,19 @@ void insert(tree*& tr, int x) {
     if (!tr) tr = n; //если дерево пустое - корень
     else {
         tree* y = tr;
-        while (y) { //ищем куда вставл¤ть
-            if (n->inf > y->inf) { //права¤ ветка
+        while (y) { //ищем куда вставлять
+            if (n->inf > y->inf) { //правая ветка
                 if (y->right) y = y->right;
                 else {
-                    n->parent = y; //узел становитс¤ правым ребенком
+                    n->parent = y; //узел становится правым ребенком
                     y->right = n;
                     break;
                 }
             }
-            else if (n->inf < y->inf) { //лева¤ ветка
+            else if (n->inf < y->inf) { //левая ветка
                 if (y->left) y = y->left;
                 else {
-                    n->parent = y; //узел становитс¤ левым ребенком
+                    n->parent = y; //узел становится левым ребенком
                     y->left = n;
                     break;
                 }
@@ -73,59 +73,79 @@ tree* Max(tree* tr) {
     else return Max(tr->right); //идем по правой ветке до конца
 }
 
-//поиск следующего элемента
-tree* Next(tree* tr, int x) {
+
+tree* Next(tree* tr, int x) {//поиск следующего
     tree* n = find(tr, x);
-    if (!n) return NULL;
-
-    if (n->right) //если есть правый ребенок
-        return Min(n->right); //min по правой ветке
-
+    if (n->right)//если есть правый ребенок
+        return Min(n->right);//min по правой ветке
     tree* y = n->parent; //родитель
-    while (y && n == y->right) { //пока не дошли до корн¤ или узел - правый ребенок
-        n = y; //идем вверх по дереву
+    while (y && n == y->right) {//пока не дошли до корня или узел - правый ребенок
+        n = y;//идем вверх по дереву
         y = y->parent;
     }
-    return y; //возвращаем родител¤
+    return y;//возвращаем родителя
 }
 
-//удаление узла из дерева бинарного поиска
 void Delete(tree*& tr, tree* v) {
-    if (!v) return;
-
     tree* p = v->parent;
 
-    //1.удаление листа
-    if (!v->left && !v->right) {
-        if (!p) tr = NULL;
-        else {
-            if (p->left == v) p->left = NULL;
-            else p->right = NULL;
+    if (!v->left && !v->right) {//нет детей
+        if (!p) { //корень без детей
+            tr = NULL;
         }
+        else if (p->left == v)
+            p->left = NULL;
+        else
+            p->right = NULL;
         delete v;
     }
-    //2.удаление узла с одним ребенком
-    else if (!v->left || !v->right) {
-        tree* child = v->left ? v->left : v->right;
-        if (p) {
-            if (p->left == v) p->left = child;
-            else p->right = child;
-            child->parent = p;
+    else if (!v->left || !v->right) {//один ребенок
+        if (!p) { //корень с одним ребенком
+            if (v->left) {
+                tr = v->left;
+                v->left->parent = NULL;
+            }
+            else {
+                tr = v->right;
+                v->right->parent = NULL;
+            }
+            delete v;
         }
         else {
-            tr = child;
-            child->parent = NULL;
+            if (v->left) {
+                if (p->left == v)
+                    p->left = v->left;
+                else
+                    p->right = v->left;
+                v->left->parent = p;
+            }
+            else {
+                if (p->left == v)
+                    p->left = v->right;
+                else
+                    p->right = v->right;
+                v->right->parent = p;
+            }
+            delete v;
         }
-        delete v;
     }
-    //3.удаление узла с двум¤ детьми
-    else {
-        tree* succ = Min(v->right); //следующий за удал¤емым узлом
-        v->inf = succ->inf; //присваиваем значение
-        Delete(tr, succ);
+    else {//удаление узла с двумя детьми
+        tree* s = Next(tr, v->inf); //находим следующий за удаляемым узел
+        v->inf = s->inf;
+        tree* parent = s->parent;
+        if (parent->left == s) {
+            parent->left = s->right;
+            if (s->right)
+                s->right->parent = parent;
+        }
+        else {
+            parent->right = s->right;
+            if (s->right)
+                s->right->parent = parent;
+        }
+        delete s;
     }
 }
-
 //определение максимальной высоты дерева
 void max_height(tree* x, short& max, short deepness = 1) {
     if (deepness > max) max = deepness;
@@ -146,7 +166,7 @@ bool isSizeOfConsoleCorrect(const short& width, const short& height) {
     return true;
 }
 
-//вспомогательна¤ функци¤ дл¤ вывода дерева
+//вспомогательная функция для вывода дерева
 void print_helper(tree* x, const COORD pos, const short offset) {
     SetConsoleCursorPosition(outp, pos);
     cout << right << setw(offset + 1) << x->inf;
@@ -181,7 +201,7 @@ void printTree(tree* tr) {
     }
 }
 
-//пр¤мой обход (корень-левый-правый)
+//прямой обход (корень-левый-правый)
 void preorder(tree* tr) {
     if (tr) {
         cout << tr->inf << " "; //корень
@@ -199,7 +219,7 @@ void inorder(tree* tr) {
     }
 }
 
-//обратный обход (Ћевый-ѕравый- орень)
+//обратный обход (Левый-Правый-Корень)
 void postorder(tree* tr) {
     if (tr) {
         postorder(tr->left); //левое поддерево
@@ -209,7 +229,7 @@ void postorder(tree* tr) {
 }
 
 void callOrder(tree* tr) {
-    cout << "пр¤мой обход (preorder): ";
+    cout << "прямой обход (preorder): ";
     preorder(tr);
     cout << endl;
 
@@ -243,30 +263,30 @@ int main() {
     cout << endl;
 
     cout << "=== вставка элемента ===" << endl;
-    cout << "¬ведите элемент дл¤ вставки: ";
+    cout << "Введите элемент для вставки: ";
     cin >> x;
     insert(tr, x);
-    cout << "Ёлемент " << x << " вставлен в дерево." << endl;
-    cout << "ƒерево после вставки:" << endl;
+    cout << "Элемент " << x << " вставлен в дерево." << endl;
+    cout << "Дерево после вставки:" << endl;
     printTree(tr);
     cout << endl;
     cout << endl;
     callOrder(tr);
 
     cout << "=== удаление элемента ===" << endl;
-    cout << "¬ведите элемент дл¤ удалени¤: ";
+    cout << "Введите элемент для удаления: ";
     cin >> x;
 
     tree* toDelete = find(tr, x);
     if (toDelete) {
         Delete(tr, toDelete);
-        cout << "Ёлемент " << x << " удален из дерева." << endl;
-        cout << "ƒерево после удалени¤:" << endl;
+        cout << "Элемент " << x << " удален из дерева." << endl;
+        cout << "Дерево после удаления:" << endl;
         printTree(tr);
         cout << endl;
     }
     else {
-        cout << "Ёлемент " << x << " не найден в дереве!" << endl;
+        cout << "Элемент " << x << " не найден в дереве!" << endl;
     }
     cout << endl;
 
