@@ -29,6 +29,10 @@ void delete_case2(tree*& tr, tree* n);
 void delete_case3(tree*& tr, tree* n);
 void delete_case4(tree*& tr, tree* n);
 void delete_case5(tree*& tr, tree* n);
+void delete_case6(tree*& tr, tree* n);
+void replace_node(tree*& tr, tree* old_node, tree* new_node);
+tree* find_min(tree* node);
+tree* find_max(tree* node);
 
 tree* node(tree* p, int x) {
     tree* n = new tree;
@@ -38,7 +42,6 @@ tree* node(tree* p, int x) {
     n->left = n->right = NULL;
     return n;
 }
-
 
 tree* root(int x) {
     tree* n = new tree;
@@ -120,6 +123,7 @@ void rotate_right(tree*& tr, tree* n) {
 //функции на разные случаи вставки
 void insert_case5(tree*& tr, tree* n) {
     tree* g = grandparent(n);
+    if (!g) return;
 
     n->parent->color = BLACK;
     g->color = RED;
@@ -134,6 +138,7 @@ void insert_case5(tree*& tr, tree* n) {
 
 void insert_case4(tree*& tr, tree* n) {
     tree* g = grandparent(n);
+    if (!g) return;
 
     if (n == n->parent->right && n->parent == g->left) {
         rotate_left(tr, n->parent);
@@ -154,8 +159,10 @@ void insert_case3(tree*& tr, tree* n) {
         n->parent->color = BLACK;
         u->color = BLACK;
         tree* g = grandparent(n);
-        g->color = RED;
-        insert_case1(tr, g);
+        if (g) {
+            g->color = RED;
+            insert_case1(tr, g);
+        }
     }
     else {
         insert_case4(tr, n);
@@ -163,6 +170,7 @@ void insert_case3(tree*& tr, tree* n) {
 }
 
 void insert_case2(tree*& tr, tree* n) {
+    if (!n->parent) return;
     if (n->parent->color == BLACK)
         return;
     else
@@ -196,7 +204,7 @@ void insert(tree*& tr, int x) {
         else if (x > y->inf)
             y = y->right;
         else
-            return;
+            return;  //элемент уже существует
     }
 
     tree* n = node(p, x);
@@ -233,23 +241,26 @@ tree* create_tree() {
 void replace_node(tree*& tr, tree* old_node, tree* new_node) {
     if (!old_node->parent) {
         tr = new_node;
+        if (new_node) new_node->parent = NULL;
     }
     else {
         if (old_node == old_node->parent->left)
             old_node->parent->left = new_node;
         else
             old_node->parent->right = new_node;
-    }
 
-    if (new_node) {
-        new_node->parent = old_node->parent;
+        if (new_node)
+            new_node->parent = old_node->parent;
     }
 }
 
 void delete_case6(tree*& tr, tree* n) {
-    tree* s = sibling(n);
+    if (!n || !n->parent) return;
 
-    if (s) s->color = n->parent->color;
+    tree* s = sibling(n);
+    if (!s) return;
+
+    s->color = n->parent->color;
     n->parent->color = BLACK;
 
     if (n == n->parent->left) {
@@ -263,9 +274,18 @@ void delete_case6(tree*& tr, tree* n) {
 }
 
 void delete_case5(tree*& tr, tree* n) {
-    tree* s = sibling(n);
+    if (!n || !n->parent) {
+        delete_case6(tr, n);
+        return;
+    }
 
-    if (s && s->color == BLACK) {
+    tree* s = sibling(n);
+    if (!s) {
+        delete_case6(tr, n);
+        return;
+    }
+
+    if (s->color == BLACK) {
         if ((n == n->parent->left) &&
             (!s->right || s->right->color == BLACK) &&
             (s->left && s->left->color == RED)) {
@@ -288,10 +308,19 @@ void delete_case5(tree*& tr, tree* n) {
 }
 
 void delete_case4(tree*& tr, tree* n) {
-    tree* s = sibling(n);
+    if (!n || !n->parent) {
+        delete_case5(tr, n);
+        return;
+    }
 
-    if (n->parent && n->parent->color == RED &&
-        s && s->color == BLACK &&
+    tree* s = sibling(n);
+    if (!s) {
+        delete_case5(tr, n);
+        return;
+    }
+
+    if (n->parent->color == RED &&
+        s->color == BLACK &&
         (!s->left || s->left->color == BLACK) &&
         (!s->right || s->right->color == BLACK)) {
 
@@ -304,15 +333,18 @@ void delete_case4(tree*& tr, tree* n) {
 }
 
 void delete_case3(tree*& tr, tree* n) {
+    if (!n) return;
+
     tree* s = sibling(n);
+    bool parentBlack = (!n->parent || n->parent->color == BLACK);
+    bool siblingBlack = (!s || s->color == BLACK);
+    bool leftNephewBlack = (!s || !s->left || s->left->color == BLACK);
+    bool rightNephewBlack = (!s || !s->right || s->right->color == BLACK);
 
-    if ((!n->parent || n->parent->color == BLACK) &&
-        (!s || s->color == BLACK) &&
-        (!s->left || s->left->color == BLACK) &&
-        (!s->right || s->right->color == BLACK)) {
-
+    if (parentBlack && siblingBlack && leftNephewBlack && rightNephewBlack) {
         if (s) s->color = RED;
-        delete_case1(tr, n->parent);
+        if (n->parent)
+            delete_case1(tr, n->parent);
     }
     else {
         delete_case4(tr, n);
@@ -320,6 +352,11 @@ void delete_case3(tree*& tr, tree* n) {
 }
 
 void delete_case2(tree*& tr, tree* n) {
+    if (!n || !n->parent) {
+        delete_case3(tr, n);
+        return;
+    }
+
     tree* s = sibling(n);
 
     if (s && s->color == RED) {
@@ -336,14 +373,18 @@ void delete_case2(tree*& tr, tree* n) {
 }
 
 void delete_case1(tree*& tr, tree* n) {
+    if (!n) return;
+
     if (!n->parent) {
         if (n->left) {
             tr = n->left;
             tr->color = BLACK;
+            tr->parent = NULL;
         }
         else if (n->right) {
             tr = n->right;
             tr->color = BLACK;
+            tr->parent = NULL;
         }
     }
     else {
@@ -351,8 +392,25 @@ void delete_case1(tree*& tr, tree* n) {
     }
 }
 
+tree* find_min(tree* node) {
+    if (!node) return NULL;
+    while (node->left)
+        node = node->left;
+    return node;
+}
+
+tree* find_max(tree* node) {
+    if (!node) return NULL;
+    while (node->right)
+        node = node->right;
+    return node;
+}
+
 //основная функция удаления
 void delete_node(tree*& tr, int x) {
+    if (!tr) return;  //дерево пустое
+
+    //поиск удаляемого узла
     tree* n = tr;
     while (n) {
         if (x < n->inf)
@@ -362,70 +420,77 @@ void delete_node(tree*& tr, int x) {
         else
             break;
     }
-
-    if (!n) return;
-
-    if (n->left && n->right) {
-        tree* succ = n->left;
-        while (succ->right)
-            succ = succ->right;
-
-        n->inf = succ->inf;
-        n = succ;
+    if (!n) {
+        cout << "Узел не найден!" << endl;
+        return;
     }
 
+    //случай 1: удаляемый узел имеет двух реальных детей
+    if (n->left && n->right) {
+        tree* buf;
+
+        //выбор замены
+        if (n->inf <= tr->inf) {
+            buf = find_max(n->left);
+        }
+        else {
+            buf = find_min(n->right);
+        }
+
+        if (!buf) return;
+
+        n->inf = buf->inf;
+        n = buf;
+    }
+
+    //определяем ребенка
     tree* child = n->left ? n->left : n->right;
 
-    if (n->color == BLACK) {
-        if (child && child->color == RED) {
-            child->color = BLACK;
+    //случай 2: удаляемый узел имеет одного ребенка
+    if (child) {
+        //заменяем узел его ребенком
+        replace_node(tr, n, child);
+
+        //если удаляемый узел черный
+        if (n->color == BLACK) {
+            //если ребенок красный перекрашиваем в черный
+            if (child->color == RED) {
+                child->color = BLACK;
+            }
+            //если ребенок черный вызываем балансировку для ребенка
+            else {
+                delete_case1(tr, child);
+            }
         }
-        else {
+        //если удаляемый узел красный удаляем
+
+        delete n;
+    }
+    //случай 3: удаляемый узел не имеет детей
+    else {
+        //если узел черный вызываем балансировку
+        if (n->color == BLACK) {
             delete_case1(tr, n);
         }
-    }
 
-    replace_node(tr, n, child);
-    delete n;
-}
-
-//обход
-void inorder(tree* tr) {
-    if (tr) {
-        inorder(tr->left);
-        cout << tr->inf << " ";
-        inorder(tr->right);
-    }
-}
-
-//вывод пути от корня до узла X
-void print_path(tree* tr, int x) {
-    tree* current = tr;
-    bool found = false;
-
-    while (current) {
-        cout << current->inf;
-        if (current->inf == x) {
-            found = true;
-            break;
-        }
-
-        if (x < current->inf) {
-            cout << " -> ";
-            current = current->left;
+        //удаляем узел
+        if (n->parent) {
+            if (n == n->parent->left)
+                n->parent->left = NULL;
+            else
+                n->parent->right = NULL;
         }
         else {
-            cout << " -> ";
-            current = current->right;
+            tr = NULL;  //удаляем корень
         }
-    }
 
-    if (!found)
-        cout << "\nNode not found!";
-    cout << endl;
+        delete n;
+    }
 }
 
+
 void max_height(tree* x, short& max, short deepness = 1) {
+    if (!x) return;
     if (deepness > max) max = deepness;
     if (x->left) max_height(x->left, max, deepness + 1);
     if (x->right) max_height(x->right, max, deepness + 1);
@@ -450,6 +515,8 @@ bool isSizeOfConsoleCorrect(const short& width, const short& height) {
 }
 
 void print_helper(tree* x, const COORD pos, const short offset) {
+    if (!x) return;
+
     SetConsoleTextAttribute(outp, x->color == RED ? 12 : 8);
     SetConsoleCursorPosition(outp, pos);
     cout << setw(offset + 1) << x->inf;
@@ -461,54 +528,50 @@ void print_helper(tree* x, const COORD pos, const short offset) {
 }
 
 void print(tree* tr) {
-    if (tr) {
-        short max = 1;
-        max_height(tr, max);
-        short width = 1 << max + 1, max_w = 128;
-        if (width > max_w) width = max_w;
-
-        while (!isSizeOfConsoleCorrect(width, max))
-            system("pause");
-
-        for (short i = 0; i < max; ++i)
-            cout << '\n';
-
-        GetConsoleScreenBufferInfo(outp, &csbInfo);
-        COORD endPos = csbInfo.dwCursorPosition;
-
-        print_helper(tr, { 0, short(endPos.Y - max) }, width >> 1);
-        SetConsoleCursorPosition(outp, endPos);
-        SetConsoleTextAttribute(outp, 7);
+    if (!tr) {
+        cout << "Дерево пустое!" << endl;
+        return;
     }
+
+    short max = 1;
+    max_height(tr, max);
+    short width = 1 << (max + 1);
+    short max_w = 128;
+    if (width > max_w) width = max_w;
+
+    system("cls");
+    for (short i = 0; i < max; ++i)
+        cout << '\n';
+
+    GetConsoleScreenBufferInfo(outp, &csbInfo);
+    COORD endPos = csbInfo.dwCursorPosition;
+
+    print_helper(tr, { 0, short(endPos.Y - max) }, width >> 1);
+    SetConsoleCursorPosition(outp, endPos);
+    SetConsoleTextAttribute(outp, 7);
 }
 
 int main() {
     setlocale(LC_ALL, "RUS");
+    int x;
+    //создание дерева
+    cout << "=== СОЗДАНИЕ КРАСНО-ЧЕРНОГО ДЕРЕВА ===\n";
     tree* tr = create_tree();
-
     cout << "\nисходное дерево:\n";
     print(tr);
-
-    cout << "\nобход: ";
-    inorder(tr);
-    cout << endl;
-
-    int x;
-    cout << "\nвведите элемент путь до которого нужно найти: ";
-    cin >> x;
-    cout << "путь до " << x << ": ";
-    print_path(tr, x);
-
-    cout << "\nвведите узел для удаления: ";
-    cin >> x;
-    delete_node(tr, x);
-
-    cout << "\nдерево после удаления узла:\n";
-    print(tr);
-    cout << "\nвведите узел для вставки: ";
+    //вставка нового элемента
+    cout << "\n=== ВСТАВКА НОВОГО ЭЛЕМЕНТА ===\n";
+    cout << "введите элемент для вставки: ";
     cin >> x;
     insert(tr, x);
-    cout << "\nдерево после вставки нового элемента:\n";
+    cout << "\nдерево после вставки элемента " << x << ":\n";
+    print(tr);
+    //удаление элемента
+    cout << "\n=== УДАЛЕНИЕ ЭЛЕМЕНТА ===\n";
+    cout << "введите элемент для удаления: ";
+    cin >> x;
+    delete_node(tr, x);
+    cout << "\nдерево после удаления элемента " << x << ":\n";
     print(tr);
     return 0;
 }
