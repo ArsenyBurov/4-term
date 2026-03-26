@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Burov {
+namespace Student {
 
 	using namespace System;
 	using namespace System::ComponentModel;
