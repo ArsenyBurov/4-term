@@ -1,8 +1,8 @@
-#pragma once
+п»ї#pragma once
 #include "Matrix.h"
 #include <algorithm>
 
-// функция вычисления кода точки
+// С„СѓРЅРєС†РёСЏ РІС‹С‡РёСЃР»РµРЅРёСЏ РєРѕРґР° С‚РѕС‡РєРё
 unsigned int codeKS(vec2 P, float minX, float minY, float maxX, float maxY) {
     unsigned int code = 0;
     if (P.x < minX) {
@@ -20,7 +20,7 @@ unsigned int codeKS(vec2 P, float minX, float minY, float maxX, float maxY) {
     return code;
 }
 
-// процедура отсечения отрезка
+// РїСЂРѕС†РµРґСѓСЂР° РѕС‚СЃРµС‡РµРЅРёСЏ РѕС‚СЂРµР·РєР°
 bool clip(vec2& A, vec2& B, float minX, float minY, float maxX, float maxY) {
     unsigned int codeA = codeKS(A, minX, minY, maxX, maxY);
     unsigned int codeB = codeKS(B, minX, minY, maxX, maxY);

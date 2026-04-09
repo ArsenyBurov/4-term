@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 class vec2 {
 public:
@@ -15,7 +15,7 @@ public:
     vec3(float a, float b, float c) : x(a), y(b), z(c) {}
     vec3(vec2 v, float c) : vec3(v.x, v.y, c) {}
 
-    // умножение векторов
+    // СѓРјРЅРѕР¶РµРЅРёРµ РІРµРєС‚РѕСЂРѕРІ
     vec3& operator*=(const vec3& v) {
         x *= v.x;
         y *= v.y;
@@ -31,13 +31,13 @@ public:
     }
 };
 
-// скалярное произведение
+// СЃРєР°Р»СЏСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ
 float dot(vec3 v1, vec3 v2) {
     vec3 tmp = v1 * v2;
     return tmp.x + tmp.y + tmp.z;
 }
 
-// класс для матриц 3x3
+// РєР»Р°СЃСЃ РґР»СЏ РјР°С‚СЂРёС† 3x3
 class mat3 {
 public:
     vec3 row1, row2, row3;
@@ -53,7 +53,7 @@ public:
         return ((vec3*)this)[i];
     }
 
-    // транспонирование
+    // С‚СЂР°РЅСЃРїРѕРЅРёСЂРѕРІР°РЅРёРµ
     mat3 transpose() {
         mat3 tmp(*this);
         for (int i = 0; i < 3; i++)
@@ -62,7 +62,7 @@ public:
         return *this;
     }
 
-    // умножение матрицы на вектор
+    // СѓРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†С‹ РЅР° РІРµРєС‚РѕСЂ
     const vec3 operator*(const vec3& v) {
         vec3* res = new vec3();
         for (int i = 0; i < 3; i++) {
@@ -71,7 +71,7 @@ public:
         return *res;
     }
 
-    // умножение матриц
+    // СѓРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†
     mat3& operator*= (const mat3& m) {
         mat3 A(*this), B(m);
         B.transpose();
@@ -84,7 +84,7 @@ public:
     }
 };
 
-// функция перехода из однородных координат в евклидовы
+// С„СѓРЅРєС†РёСЏ РїРµСЂРµС…РѕРґР° РёР· РѕРґРЅРѕСЂРѕРґРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚ РІ РµРІРєР»РёРґРѕРІС‹
 vec2 normalize(vec3 v) {
     return vec2(v.x / v.z, v.y / v.z);
 }

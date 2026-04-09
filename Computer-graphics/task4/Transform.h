@@ -1,8 +1,8 @@
-#pragma once
+п»ї#pragma once
 #include "Matrix.h"
 #include <math.h>
 
-// матрица переноса
+// РјР°С‚СЂРёС†Р° РїРµСЂРµРЅРѕСЃР°
 mat3 translate(float Tx, float Ty) {
     mat3* res = new mat3(1.f);
     (*res)[0][2] = Tx;
@@ -10,7 +10,7 @@ mat3 translate(float Tx, float Ty) {
     return *res;
 }
 
-// матрица масштабирования
+// РјР°С‚СЂРёС†Р° РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёСЏ
 mat3 scale(float Sx, float Sy) {
     mat3* res = new mat3(1.f);
     (*res)[0][0] = Sx;
@@ -18,12 +18,12 @@ mat3 scale(float Sx, float Sy) {
     return *res;
 }
 
-// матрица масштабирования
+// РјР°С‚СЂРёС†Р° РјР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёСЏ
 mat3 scale(float S) {
     return scale(S, S);
 }
 
-// матрица поворота
+// РјР°С‚СЂРёС†Р° РїРѕРІРѕСЂРѕС‚Р°
 mat3 rotate(float theta) {
     mat3* res = new mat3(1.f);
     (*res)[0][0] = (*res)[1][1] = (float)cos(theta);
@@ -32,14 +32,14 @@ mat3 rotate(float theta) {
     return *res;
 }
 
-//зеркальное отражение относительно оси Ox
+//Р·РµСЂРєР°Р»СЊРЅРѕРµ РѕС‚СЂР°Р¶РµРЅРёРµ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РѕСЃРё Ox
 mat3 mirrorX() {
     mat3 res(1.f);
-    res[1][1] = -1; //меняем знак
+    res[1][1] = -1; //РјРµРЅСЏРµРј Р·РЅР°Рє
     return res;
 }
 
-//зеркальное отражение относительно оси Oy
+//Р·РµСЂРєР°Р»СЊРЅРѕРµ РѕС‚СЂР°Р¶РµРЅРёРµ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ РѕСЃРё Oy
 mat3 mirrorY() {
     mat3 res(1.f);
     res[0][0] = -1;

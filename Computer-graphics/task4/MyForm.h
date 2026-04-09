@@ -99,7 +99,7 @@ namespace Burov {
 			// btnOpen
 			// 
 			this->btnOpen->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->btnOpen->Location = System::Drawing::Point(394, 12);
+			this->btnOpen->Location = System::Drawing::Point(1193, 12);
 			this->btnOpen->Name = L"btnOpen";
 			this->btnOpen->Size = System::Drawing::Size(75, 23);
 			this->btnOpen->TabIndex = 0;
@@ -111,7 +111,7 @@ namespace Burov {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(481, 334);
+			this->ClientSize = System::Drawing::Size(1280, 809);
 			this->Controls->Add(this->btnOpen);
 			this->DoubleBuffered = true;
 			this->KeyPreview = true;
@@ -163,8 +163,8 @@ namespace Burov {
 	}
 	private: System::Void MyForm_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
 		//координаты центра окна
-		float Wcx = ClientRectangle.Width / 2.f;
-		float Wcy = ClientRectangle.Height / 2.f;
+		float centerX = left + Wx / 2;
+		float centerY = top + Wy / 2;
 
 		switch (e->KeyCode) {
 		case Keys::Escape:
@@ -172,9 +172,9 @@ namespace Burov {
 			break;
 
 		case Keys::Q:
-			T = translate(-Wcx, -Wcy) * T;
+			T = translate(-centerX, -centerY) * T;
 			T = rotate(0.01f) * T;
-			T = translate(Wcx, Wcy) * T;
+			T = translate(centerX, centerY) * T;
 			break;
 
 		case Keys::W:
@@ -183,9 +183,9 @@ namespace Burov {
 
 		case Keys::E:
 			// поворот по часовой стрелке на 0.01 радиан
-			T = translate(-Wcx, -Wcy) * T;
+			T = translate(-centerX, -centerY) * T;
 			T = rotate(-0.01f) * T;  // отрицательный угол = по часовой стрелке
-			T = translate(Wcx, Wcy) * T;
+			T = translate(centerX, centerY) * T;
 			break;
 
 		case Keys::S:
@@ -205,16 +205,16 @@ namespace Burov {
 
 		case Keys::R:
 			// поворот по часовой стрелке на 0.05 радиан
-			T = translate(-Wcx, -Wcy) * T;
+			T = translate(-centerX, -centerY) * T;
 			T = rotate(-0.05f) * T;
-			T = translate(Wcx, Wcy) * T;
+			T = translate(centerX, centerY) * T;
 			break;
 
 		case Keys::Y:
 			// поворот против часовой стрелки на 0.05 радиан
-			T = translate(-Wcx, -Wcy) * T;
+			T = translate(-centerX, -centerY) * T;
 			T = rotate(0.05f) * T;
-			T = translate(Wcx, Wcy) * T;
+			T = translate(centerX, centerY) * T;
 			break;
 
 		case Keys::T:
@@ -239,58 +239,58 @@ namespace Burov {
 
 		case Keys::Z:
 			// увеличение в 1.1 раза относительно центра окна
-			T = translate(-Wcx, -Wcy) * T;   // перенос начала координат в центр окна
+			T = translate(-centerX, -centerY) * T;   // перенос начала координат в центр окна
 			T = scale(1.1f) * T;             // увеличение в 1.1 раза
-			T = translate(Wcx, Wcy) * T;     // перенос начала координат обратно
+			T = translate(centerX, centerY) * T;     // перенос начала координат обратно
 			break;
 
 		case Keys::X:
 			// уменьшение в 1.1 раза относительно центра окна
-			T = translate(-Wcx, -Wcy) * T;   // перенос начала координат в центр окна
+			T = translate(-centerX, -centerY) * T;   // перенос начала координат в центр окна
 			T = scale(1 / 1.1f) * T;           // уменьшение в 1.1 раза
-			T = translate(Wcx, Wcy) * T;     // перенос начала координат обратно
+			T = translate(centerX, centerY) * T;     // перенос начала координат обратно
 			break;
 
 		case Keys::U:
 			// зеркальное отражение относительно Ox
-			T = translate(-Wcx, -Wcy) * T;   // перенос начала координат в центр окна
+			T = translate(-centerX, -centerY) * T;   // перенос начала координат в центр окна
 			T = mirrorX() * T;                // отражение относительно горизонтальной оси
-			T = translate(Wcx, Wcy) * T;     // перенос начала координат обратно
+			T = translate(centerX, centerY) * T;     // перенос начала координат обратно
 			break;
 
 		case Keys::J:
 			// зеркальное отражение относительно Oy
-			T = translate(-Wcx, -Wcy) * T;   // перенос начала координат в центр окна
+			T = translate(-centerX, -centerY) * T;   // перенос начала координат в центр окна
 			T = mirrorY() * T;                // отражение относительно вертикальной оси
-			T = translate(Wcx, Wcy) * T;     // перенос начала координат обратно
+			T = translate(centerX, centerY) * T;     // перенос начала координат обратно
 			break;
 
 		case Keys::I:
 			// растяжение по горизонтали в 1.1 раза
-			T = translate(-Wcx, -Wcy) * T;   // перенос начала координат в центр окна
+			T = translate(-centerX, -centerY) * T;   // перенос начала координат в центр окна
 			T = scale(1.1f, 1.0f) * T;       // растяжение по X в 1.1 раза, по Y без изменений
-			T = translate(Wcx, Wcy) * T;     // перенос начала координат обратно
+			T = translate(centerX, centerY) * T;     // перенос начала координат обратно
 			break;
 
 		case Keys::K:
 			// сжатие по горизонтали в 1.1 раза
-			T = translate(-Wcx, -Wcy) * T;
+			T = translate(-centerX, -centerY) * T;
 			T = scale(1 / 1.1f, 1.0f) * T; // сжатие по X в 1.1 раза, по Y без изменений
-			T = translate(Wcx, Wcy) * T;
+			T = translate(centerX, centerY) * T;
 			break;
 
 		case Keys::O:
 			// растяжение по вертикали в 1.1 раза
-			T = translate(-Wcx, -Wcy) * T;
+			T = translate(-centerX, -centerY) * T;
 			T = scale(1.0f, 1.1f) * T; // растяжение по Y в 1.1 раза, по X без изменений
-			T = translate(Wcx, Wcy) * T;
+			T = translate(centerX, centerY) * T;
 			break;
 
 		case Keys::L:
 			// сжатие по вертикали в 1.1 раза
-			T = translate(-Wcx, -Wcy) * T;
+			T = translate(-centerX, -centerY) * T;
 			T = scale(1.0f, 1 / 1.1f) * T; // сжатие по Y в 1.1 раза, по X без изменений
-			T = translate(Wcx, Wcy) * T;
+			T = translate(centerX, centerY) * T;
 			break;
 
 
