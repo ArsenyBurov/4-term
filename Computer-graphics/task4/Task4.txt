@@ -1,9 +1,9 @@
 frame 20 10
 
 # ============================================
-# ПЕРВЫЙ РИСУНОК: КЛОУН (ваш из файла Clown.txt)
+# ПЕРВЫЙ РИСУНОК: КЛОУН
 # ============================================
-model 5 7.5 10 15    # центр примерно в (5,7), размер 10×15
+model 5 7.5 10 15
 color 255 0 0
 thickness 3
 path 7
@@ -291,7 +291,7 @@ popTransform
 pushTransform
 scale 1.5
 
-# 1. ЗЕЛЕНЫЙ (180°) - 9 часов
+# 1. ЗЕЛЕНЫЙ (180)
 pushTransform
 translate 7 0
 rotate 180
@@ -299,7 +299,7 @@ translate 10 9
 figure
 popTransform
 
-# 2. ЗЕЛЕНЫЙ (270°) - 6 часов
+# 2. ЗЕЛЕНЫЙ (270)
 pushTransform
 translate 7 0
 rotate 270
@@ -307,7 +307,7 @@ translate 10 9
 figure
 popTransform
 
-# 3. ЗЕЛЕНЫЙ (0°) - 3 часа
+# 3. ЗЕЛЕНЫЙ (0)
 pushTransform
 translate 7 0
 rotate 0
@@ -318,7 +318,7 @@ popTransform
 popTransform
 
 # ============================================
-# ВТОРОЙ РИСУНОК: ЗАЯЦ (из Hare_full.txt)
+# ВТОРОЙ РИСУНОК: ЗАЯЦ
 # ============================================
 model 4.25 4.25 8.5 8.5
 color 255 0 0
@@ -405,7 +405,7 @@ path 4
 pushTransform
 scale 1.5
 
-# 4. СИНИЙ (210°)
+# 4. СИНИЙ (210)
 pushTransform
 translate 7 0
 rotate 210
@@ -413,7 +413,7 @@ translate 10 9
 figure
 popTransform
 
-# 5. СИНИЙ (240°)
+# 5. СИНИЙ (240)
 pushTransform
 translate 7 0
 rotate 240
@@ -421,7 +421,7 @@ translate 10 9
 figure
 popTransform
 
-# 6. СИНИЙ (300°)
+# 6. СИНИЙ (300)
 pushTransform
 translate 7 0
 rotate 300
@@ -429,7 +429,7 @@ translate 10 9
 figure
 popTransform
 
-# 7. СИНИЙ (330°)
+# 7. СИНИЙ (330)
 pushTransform
 translate 7 0
 rotate 330
