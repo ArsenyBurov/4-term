@@ -1,4 +1,4 @@
-п»ї#include <iostream>
+#include <iostream>
 #include <vector>  
 #include <string>
 
@@ -8,57 +8,60 @@ vector<int> prefix_function(string s) {
     int n = (int)s.size();
     vector<int> p(n, 0);
     for (int i = 1; i < n; i++) {
-        //РґР»РёРЅР° РЅРѕРІРѕРіРѕ РїСЂРµС„РёРєСЃР° РЅРµ РјРѕР¶РµС‚ РїСЂРµРІС‹С€Р°С‚СЊ p[i-1] + 11
+        //длина нового префикса не может превышать p[i-1] + 11
         int c = p[i - 1];
-        //СѓРјРµРЅСЊС€Р°РµРј c, РїРѕРєР° РЅРµ РЅР°Р№РґС‘Рј РїРѕР·РёС†РёСЋ, РіРґРµ СЃРёРјРІРѕР» s[cur] СЃРѕРІРїР°РґС‘С‚ СЃ s[i]
+        //уменьшаем c, пока не найдём позицию, где символ s[cur] совпадёт с s[i]
         while (s[i] != s[c] && c > 0)
             c = p[c - 1];
-        // Р·РґРµСЃСЊ Р»РёР±Рѕ s[i] == s[cur], Р»РёР±Рѕ cur == 0
+        // здесь либо s[i] == s[cur], либо cur == 0
         if (s[i] == s[c])
-            p[i] = c + 1; //СѓРІРµР»РёС‡РёРІР°РµРј РґР»РёРЅСѓ РїСЂРµС„РёРєСЃР° РЅР° 1
+            p[i] = c + 1; //увеличиваем длину префикса на 1
     }
     return p;
 }
 
-vector<int> z_function(string s){
-    int n = (int)s.size();
-    vector<int> z(n, 0);
-    int l = 0, r = 0;
+vector<int> KMP(string s, string t) {
+    vector<int> A;
 
-    for (int i = 1; i < n; i++){
-        //РµСЃР»Рё С‚РµРєСѓС‰Р°СЏ РїРѕР·РёС†РёСЏ РІРЅСѓС‚СЂРё СѓР¶Рµ РЅР°Р№РґРµРЅРЅРѕРіРѕ РѕС‚СЂРµР·РєР°
-        if (i <= r)
-            z[i] = min(r - i + 1, z[i - l]);
-        while (i + z[i] < n && s[z[i]] == s[i + z[i]])
-            z[i]++;
-        //РµСЃР»Рё РЅРѕРІС‹Р№ Z-РѕС‚СЂРµР·РѕРє РґР»РёРЅРЅРµРµ С‚РµРєСѓС‰РµРіРѕ, РѕР±РЅРѕРІР»СЏРµРј РіСЂР°РЅРёС†С‹
-        if (i + z[i] - 1 > r){
-            r = i + z[i] - 1;
-            l = i;
+    if (s.empty()) return A;
+
+    int k = 0;  //количество совпавших символов
+    vector<int> pi = prefix_function(s);  //префикс-функция от образца S
+    int n = s.size();
+    int m = t.size();
+
+    for (int i = 0; i < m; i++) {
+        //пока есть совпадение и текущий символ не совпадает
+        while (k > 0 && t[i] != s[k]) {
+            k = pi[k - 1];
+        }
+        //если символы совпали
+        if (t[i] == s[k]) {
+            k++;
+        }
+        // если нашли полное вхождение
+        if (k == n) {
+            A.push_back(i - n + 1); //позиция начала вхождения
+            k = pi[k - 1];
         }
     }
 
-    return z;
+    return A;
 }
 
 int main() {
     setlocale(LC_ALL, "RUS");
 
-    string str;
-    cout << "СЃС‚СЂРѕРєР°: ";
-    getline(cin, str);
+    string st, text;
+    cout << "строка для поиска: ";
+    getline(cin, st);
+    cout << "исходная строка: ";
+    getline(cin, text);
+    vector<int> result = KMP(st, text);
 
-    vector<int> pref = prefix_function(str);
-    cout << "РїСЂРµС„РёРєСЃ С„СѓРЅРєС†РёСЏ: ";
-    for (int i = 0; i < pref.size(); i++) {
-        cout << pref[i] << " ";
-    }
-    cout << endl;
-
-    vector<int> z = z_function(str);
-    cout << "z-С„СѓРЅРєС†РёСЏ: ";
-    for (int i = 0; i < z.size(); i++) {
-        cout << z[i] << " ";
+    cout << "результат: ";
+    for (int i = 0; i < result.size(); i++) {
+        cout << result[i] << " ";
     }
     cout << endl;
 }
